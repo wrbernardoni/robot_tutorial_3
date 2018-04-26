@@ -16,17 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(gazebo REQUIRED)
 
 # Generate Xacro files
-file(GLOB xacro_files ${CMAKE_CURRENT_SOURCE_DIR}/urdf/*.xacro)
-
-foreach(it ${xacro_files})
-  string(REGEX MATCH "(.*)[.]xacro$" unused ${it})
-  set(output_filename ${CMAKE_MATCH_1}.urdf)
-
-  xacro_add_xacro_file(${it} ${output_filename})
-  list(APPEND xac_files ${output_filename})
-endforeach(it)
-
-add_custom_target(media_files ALL DEPENDS ${xac_files})
+file(GLOB xacro_files urdf/*.xacro)
+xacro_add_files(${xacro_files} TARGET media_files)
 
 # Declare dependencies
 catkin_package(
