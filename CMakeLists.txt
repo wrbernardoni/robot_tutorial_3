@@ -41,7 +41,7 @@ include_directories(
 )
 
 # Compile plugin
-add_library(rover_plugin plugins/rover.cc)
-target_link_libraries(rover_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
+# add_library(rover_plugin plugins/rover.cc)
+# target_link_libraries(rover_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
 
 
