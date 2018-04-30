@@ -9,7 +9,7 @@
   <xacro:property name="leg_width" value="0.02" />
   <xacro:property name="leg_length" value="0.02" />
 
-  <gazebo reference="body">
+ <gazebo reference="body">
     <material>Gazebo/White</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
@@ -155,6 +155,12 @@
     <dynamics friction="0.5"/>
   </joint>
 
+  <xacro:include filename="$(find robot_tutorial_3)/urdf/lidar.urdf.xacro"/>
+  <joint name="lidarGlue" type="fixed">
+    <parent link="body"/>
+    <child link="laz_base"/>
+    <origin xyz="0 0 ${body_height/2}"/>
+  </joint>
 
   <gazebo>
     <plugin name="rover_plugin" filename="librover_plugin.so"> </plugin>
