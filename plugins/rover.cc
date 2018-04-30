@@ -98,7 +98,7 @@ namespace gazebo
        _m->GetJoint("jFL")->SetForce(0, -1.0 * LIN_MAX_EFFORT * (desLinV - vel)/MAX_LIN_V);
        _m->GetJoint("jFR")->SetForce(0, -1.0 * LIN_MAX_EFFORT * (desLinV - vel)/MAX_LIN_V);
 
-       ROS_INFO("V: %f | R: %f | L: %f", vel, rAd, lAd);
+       //ROS_INFO("V: %f | R: %f | L: %f", vel, rAd, lAd);
 
        pLA = lAngle;
        pRA = rAngle;
