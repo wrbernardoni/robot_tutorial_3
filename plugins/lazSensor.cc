@@ -3,6 +3,7 @@
 
 // Include Gazebo headers.
 #include <gazebo/gazebo.hh>
+#include <gazebo/physics/physics.hh>
 #include <gazebo/plugins/RayPlugin.hh>
 #include <gazebo/sensors/Sensor.hh>
 #include <gazebo/sensors/SensorTypes.hh>
@@ -22,6 +23,7 @@ namespace gazebo
   {
     private:
     sensors::RaySensorPtr _sensor;
+    physics::LinkPtr _l;
 
     public:
     LazSensorPlugin() {}
@@ -37,14 +39,22 @@ namespace gazebo
        RayPlugin::Load(_s, _sdf);
 
        _sensor = std::dynamic_pointer_cast<sensors::RaySensor>(_s);
+       std::string parentName = _sensor->ParentName();
+       std::string modelName = "";
+       std::string linkName = "";
+       modelName = parentName.substr(0, parentName.find(':'));
+       linkName = parentName.substr(parentName.find(':') + 2, parentName.size());
+
+       physics::WorldPtr _w = physics::get_world(_sensor->WorldName());
+       physics::ModelPtr _m = _w->GetModel(modelName.c_str());
+       _l = _m->GetLink(linkName);
 
        ROS_INFO("Laser Sensor Plugin Loaded");
-       ROS_INFO("Sensor Parent name: %s", _sensor->ParentName().c_str());
-    }
+   }
 
     virtual void OnNewLaserScans()
     {
-      double yaw = _sensor->Pose().Rot().Yaw();
+      double yaw = _sensor->Pose().Rot().Yaw() + _l->GetRelativePose().rot.GetYaw();
       std::string out = "";
       std::vector<double> ranges;
       _sensor->Ranges(ranges);
