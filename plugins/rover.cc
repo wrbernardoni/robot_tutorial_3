@@ -61,6 +61,8 @@ namespace gazebo
     double lc_V;
     double lc_Y;
 
+    double pHA;
+
     public:
     RoverPlugin() {}
 
@@ -77,16 +79,22 @@ namespace gazebo
        double lAngle = zeroToTwoPi(_m->GetJoint("lDifJoint")->GetAngle(0).Radian());
        double rAngle = zeroToTwoPi(_m->GetJoint("rDifJoint")->GetAngle(0).Radian());
 
+       double hatAngle = zeroToTwoPi(_m->GetJoint("lazRot")->GetAngle(0).Radian());
+
        double lAV = minAngleAdjust(pLA, lAngle);
        double rAV = minAngleAdjust(pRA, rAngle);
+       double hAV = minAngleAdjust(pHA, hatAngle);
 
        double lDif = minAngleAdjust(lAngle, angleSetpoint);
        double rDif = minAngleAdjust(rAngle, angleSetpoint);
 
        double lAd = (((lDif/PI) * MAX_DIF_V - lAV)/MAX_DIF_V) * DIF_MAX_EFFORT;
        double rAd = (((rDif/PI) * MAX_DIF_V - rAV)/MAX_DIF_V) * DIF_MAX_EFFORT;
+
+       double hAd = 0.5 * (0.01 - hAV)/0.01;
        _m->GetJoint("lDifJoint")->SetForce(0, lAd);
        _m->GetJoint("rDifJoint")->SetForce(0, rAd);
+       _m->GetJoint("lazRot")->SetForce(0, hAd);
 
        math::Vector3 pos = _m->GetWorldPose().pos;
        math::Quaternion rot = _m->GetWorldPose().rot;
@@ -102,6 +110,7 @@ namespace gazebo
 
        pLA = lAngle;
        pRA = rAngle;
+       pHA = hatAngle;
        pPos = pos;
     }
 
@@ -117,7 +126,7 @@ namespace gazebo
 
        _m = _model;
 
-       pLA = pRA = 0;
+       pLA = pRA = pHA = 0;
        lc_V = lc_Y = 0;
 
        std::string name = _m->GetName();
