@@ -46,8 +46,18 @@ namespace gazebo
     {
       double yaw = _sensor->Pose().Rot().Yaw();
       std::string out = "";
+      std::vector<double> ranges;
+      _sensor->Ranges(ranges);
+      for(int i = 0; i < ranges.size(); i++)
+      {
+        out = out + "[";
+        out = out + std::to_string(i);
+        out = out + "] ";
+        out = out + std::to_string(ranges[i]);
+        out = out + ", ";
+      }
       
-      ROS_INFO("[%f] Range: %d Ray: %d", yaw, _sensor->RangeCount(), _sensor->RayCount()); 
+      ROS_INFO("[%f] %s", yaw, out.c_str()); 
     };
    };
   
