@@ -91,7 +91,7 @@ namespace gazebo
        double lAd = (((lDif/PI) * MAX_DIF_V - lAV)/MAX_DIF_V) * DIF_MAX_EFFORT;
        double rAd = (((rDif/PI) * MAX_DIF_V - rAV)/MAX_DIF_V) * DIF_MAX_EFFORT;
 
-       double hAd = 0.5 * (0.01 - hAV)/0.01;
+       double hAd = 0.3 * (0.0075 - hAV)/0.0075;
        _m->GetJoint("lDifJoint")->SetForce(0, lAd);
        _m->GetJoint("rDifJoint")->SetForce(0, rAd);
        _m->GetJoint("lazRot")->SetForce(0, hAd);
